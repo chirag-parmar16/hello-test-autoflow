@@ -1,0 +1,10 @@
+<svg width="16.8" height="25.2" viewBox="0 0 16.8 25.2" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#quote-audio-play-clip)">
+    <path d="M-0.399997 0.4L16.4 13L-0.4 25.6L-0.399997 0.4Z" fill="#F7F5F2"/>
+  </g>
+  <defs>
+    <clipPath id="quote-audio-play-clip">
+      <rect width="16.8" height="25.2" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>
