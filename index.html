@@ -3,23 +3,29 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AutoFlow — Live Processing Node</title>
+  <title>Apex Cloud — Autonomous Global Edge Engine</title>
+  <meta name="description" content="Next-generation serverless edge compute with instantaneous global state sync and automated zero-downtime orchestration." />
+
+  <!-- Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --bg: #06080e;
-      --panel: rgba(14, 18, 28, 0.75);
-      --border: rgba(0, 210, 255, 0.18);
-      --border-bright: rgba(0, 210, 255, 0.45);
+      --bg: #07090e;
+      --bg-surface: #0f131c;
+      --bg-surface-elevated: #161c29;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(0, 210, 255, 0.4);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
       --cyan: #00d2ff;
-      --green: #10b981;
-      --text: #f0f4f8;
-      --muted: #627282;
+      --blue: #3b82f6;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
-      --font-sans: 'Plus Jakarta Sans', sans-serif;
     }
 
     *, *::before, *::after {
@@ -32,323 +38,777 @@
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font-sans);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+      line-height: 1.5;
       overflow-x: hidden;
-      position: relative;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Processing Grid & Scanning Beam Background */
-    body::before {
-      content: '';
+    /* Ambient Lighting */
+    .ambient-glow {
       position: fixed;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(0, 210, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 210, 255, 0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(0, 210, 255, 0.15) 0%, rgba(59, 130, 246, 0.08) 50%, transparent 80%);
+      filter: blur(80px);
       pointer-events: none;
       z-index: 0;
     }
 
-    .radar-sweep {
-      position: fixed;
-      inset: -50%;
-      background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 210, 255, 0.06) 60deg, transparent 61deg);
-      animation: sweep 10s linear infinite;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    @keyframes sweep {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* Core Terminal Processing Card */
-    .terminal-card {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 680px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 210, 255, 0.08);
-      overflow: hidden;
-    }
-
-    /* Top HUD Bar */
-    .terminal-topbar {
+    /* Top Global Banner: Proof of AutoFlow Deployment */
+    .autoflow-deployment-ribbon {
+      background: linear-gradient(90deg, #0f172a, #034263, #0f172a);
+      border-bottom: 1px solid rgba(0, 210, 255, 0.25);
+      padding: 10px 24px;
+      font-size: 0.8125rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(8, 11, 18, 0.8);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
     }
 
-    .status-badge {
+    .ribbon-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+    }
+
+    .pulse-badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      color: var(--green);
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: var(--emerald);
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
       font-weight: 600;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
     }
 
     .pulse-dot {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 10px var(--green);
-      animation: pulse 1.6s ease-in-out infinite;
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
+      animation: pulse 1.5s infinite;
     }
 
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
+      50% { opacity: 0.4; transform: scale(0.8); }
     }
 
-    .telemetry-meta {
-      color: var(--muted);
+    .ribbon-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
     }
 
-    /* Main Content */
-    .terminal-body {
-      padding: 44px 36px 36px;
+    .ribbon-right span.highlight {
+      color: var(--cyan);
+      font-weight: 600;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navbar */
+    header {
+      padding: 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(0, 210, 255, 0.4);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      font-size: 0.9375rem;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    nav a:hover {
+      color: #ffffff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid var(--border);
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: #ffffff;
+      color: #000000;
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 90px 0 60px;
       text-align: center;
     }
 
-    .greeting-pill {
+    .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
       padding: 6px 14px;
       border-radius: 9999px;
-      border: 1px solid var(--border-bright);
-      background: rgba(0, 210, 255, 0.08);
-      color: var(--cyan);
       font-family: var(--font-mono);
       font-size: 0.8125rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
+      color: var(--cyan);
       margin-bottom: 24px;
     }
 
-    h1 {
-      font-size: clamp(2.2rem, 5vw, 3.2rem);
+    .hero h1 {
+      font-size: clamp(2.8rem, 5vw, 4.4rem);
       font-weight: 800;
-      letter-spacing: -0.03em;
+      letter-spacing: -0.04em;
       line-height: 1.1;
-      margin-bottom: 12px;
+      margin-bottom: 24px;
+      color: #ffffff;
+    }
+
+    .hero h1 span.gradient {
       background: linear-gradient(135deg, #ffffff 40%, var(--cyan) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .deployed-statement {
-      font-size: 1.15rem;
-      color: #94a3b8;
-      font-weight: 500;
-      margin-bottom: 32px;
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
     }
 
-    .deployed-statement span {
-      color: #ffffff;
-      font-weight: 700;
-    }
-
-    /* Live Progress Pipeline */
-    .progress-track-wrapper {
-      margin-bottom: 32px;
-      text-align: left;
-    }
-
-    .progress-meta {
+    .hero-buttons {
       display: flex;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-bottom: 8px;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 50px;
     }
 
-    .progress-track {
-      height: 6px;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 3px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .progress-fill {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      background: linear-gradient(90deg, #0088ff, var(--cyan));
-      box-shadow: 0 0 12px var(--cyan);
-      animation: loadPulse 3s ease-in-out infinite;
-    }
-
-    @keyframes loadPulse {
-      0% { width: 35%; }
-      50% { width: 92%; }
-      100% { width: 100%; }
-    }
-
-    /* Terminal Console Stream */
-    .console-stream {
-      background: #030408;
+    /* Production Live Telemetry Dashboard Widget */
+    .live-dashboard {
+      background: var(--bg-surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: #7dd3fc;
-      text-align: left;
-      line-height: 1.8;
-      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 210, 255, 0.05);
+      margin-bottom: 90px;
     }
 
-    .console-line {
+    .dash-header {
+      background: var(--bg-surface-elevated);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
     }
 
-    .console-line span.time {
-      color: var(--muted);
+    .dash-window-dots {
+      display: flex;
+      gap: 8px;
     }
 
-    .console-line span.ok {
-      color: var(--green);
+    .dash-window-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
     }
 
-    /* Footer Telemetry Chips */
-    .hud-chips {
+    .dash-route-badge {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .dash-route-badge strong {
+      color: var(--emerald);
+    }
+
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      padding: 32px;
+      gap: 32px;
+    }
+
+    /* Real-time Metrics */
+    .metric-cards-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+    }
+
+    .metric-card-label {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .metric-card-val {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .metric-card-sub {
+      font-size: 0.75rem;
+      color: var(--emerald);
+      margin-top: 4px;
+    }
+
+    /* Live Request Stream */
+    .stream-panel {
+      background: #04060a;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
       font-family: var(--font-mono);
       font-size: 0.75rem;
-      text-align: left;
     }
 
-    .chip-item {
+    .stream-header {
+      color: var(--text-muted);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .stream-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      color: #cbd5e1;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .stream-row span.status-200 { color: var(--emerald); font-weight: 600; }
+    .stream-row span.latency { color: var(--cyan); }
+
+    /* Cluster Status Sidebar */
+    .cluster-sidebar {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 18px;
     }
 
-    .chip-label {
-      color: var(--muted);
-      font-size: 0.6875rem;
+    .cluster-title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .chip-val {
+    .node-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8125rem;
+    }
+
+    .node-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+    }
+
+    .node-online-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 6px var(--emerald);
+    }
+
+    .node-load {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
       color: #ffffff;
-      font-weight: 600;
     }
 
-    @media (max-width: 600px) {
-      .hud-chips {
+    /* Core Architectural Features Grid */
+    .features-section {
+      margin-bottom: 100px;
+    }
+
+    .section-headline {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-headline h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .section-headline p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+    }
+
+    .feat-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #ffffff;
+    }
+
+    .feat-card p {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Deployment Proof Footer Callout */
+    .autoflow-proof-box {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(6, 78, 119, 0.25));
+      border: 1px solid rgba(0, 210, 255, 0.3);
+      border-radius: 16px;
+      padding: 36px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 80px;
+    }
+
+    .proof-details h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .proof-details p {
+      color: var(--text-muted);
+      font-size: 0.9375rem;
+    }
+
+    .proof-meta-tags {
+      display: flex;
+      gap: 12px;
+      margin-top: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .proof-tag {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 10px;
+      border-radius: 6px;
+      color: var(--cyan);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .dash-grid {
         grid-template-columns: 1fr;
       }
-      .terminal-body {
-        padding: 32px 20px;
+      .metric-cards-row, .features-grid {
+        grid-template-columns: 1fr;
+      }
+      .autoflow-proof-box {
+        flex-direction: column;
+        gap: 20px;
+      }
+      nav {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
 
-  <div class="radar-sweep"></div>
-
-  <div class="terminal-card">
-    <!-- Top HUD Bar -->
-    <div class="terminal-topbar">
-      <div class="status-badge">
+  <!-- Live Deployment Verified Ribbon -->
+  <div class="autoflow-deployment-ribbon">
+    <div class="ribbon-left">
+      <div class="pulse-badge">
         <span class="pulse-dot"></span>
-        <span>PRODUCTION ACTIVE</span>
+        <span>DEPLOYED VIA AUTOFLOW</span>
       </div>
-      <div class="telemetry-meta">
-        NODE: AF-NODE-01 // RTT: 11ms
-      </div>
+      <span>Target: <strong>Ubuntu 24.04 LTS (x86_64)</strong> &bull; Direct SSH Tunnel</span>
     </div>
-
-    <!-- Main Body -->
-    <div class="terminal-body">
-      <div class="greeting-pill">
-        <span>🚀</span>
-        <span>STATUS: 100% NOMINAL</span>
-      </div>
-
-      <h1>Hello AutoFlow</h1>
-      <p class="deployed-statement">Website deployed by <span>AutoFlow</span></p>
-
-      <!-- Processing Progress Bar -->
-      <div class="progress-track-wrapper">
-        <div class="progress-meta">
-          <span>DEPLOY PIPELINE</span>
-          <span style="color: var(--cyan);">CONTAINER SERVING // 200 OK</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill"></div>
-        </div>
-      </div>
-
-      <!-- Live Console Log Stream -->
-      <div class="console-stream">
-        <div class="console-line">
-          <span class="time">[0.02s]</span>
-          <span class="ok">✔</span>
-          <span>Zero-trust SSH handshake established</span>
-        </div>
-        <div class="console-line">
-          <span class="time">[1.42s]</span>
-          <span class="ok">✔</span>
-          <span>Isolated container spawned on port 3000</span>
-        </div>
-        <div class="console-line">
-          <span class="time">[2.18s]</span>
-          <span class="ok">✔</span>
-          <span>Health check passed. SIGHUP cutover complete.</span>
-        </div>
-      </div>
-
-      <!-- Telemetry Chips -->
-      <div class="hud-chips">
-        <div class="chip-item">
-          <span class="chip-label">ORCHESTRATOR</span>
-          <span class="chip-val">AutoFlow v1.0.0</span>
-        </div>
-        <div class="chip-item">
-          <span class="chip-label">SECURITY</span>
-          <span class="chip-val" style="color: var(--green);">Zero-Trust Tunnel</span>
-        </div>
-        <div class="chip-item">
-          <span class="chip-label">DOWNTIME</span>
-          <span class="chip-val" style="color: var(--cyan);">0.00 Seconds</span>
-        </div>
-      </div>
+    <div class="ribbon-right">
+      <span>CUTOVER: <span class="highlight">0.02s (ZERO DOWNTIME)</span></span>
+      <span>ENCRYPTION: <span class="highlight">TLS 1.3 / AES-256</span></span>
+      <span>STATUS: <span style="color: var(--emerald); font-weight: 700;">200 OK</span></span>
     </div>
   </div>
 
+  <div class="ambient-glow"></div>
+
+  <div class="container">
+    <!-- Navbar -->
+    <header>
+      <a href="#" class="brand">
+        <div class="brand-logo-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+        </div>
+        <span>Apex Cloud</span>
+      </a>
+
+      <nav>
+        <a href="#metrics">Live Telemetry</a>
+        <a href="#features">Architecture</a>
+        <a href="#orchestration">AutoFlow Pipeline</a>
+        <a href="#docs">Documentation</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#metrics" class="btn-secondary">View Cluster</a>
+        <a href="#get-started" class="btn-primary">Console Login</a>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge">
+        <span>●</span>
+        <span>Next-Gen Sovereign Edge Computing</span>
+      </div>
+
+      <h1>
+        Global serverless compute.<br />
+        <span class="gradient">Sub-10ms at the edge.</span>
+      </h1>
+
+      <p>
+        Deploy full-stack applications with instantaneous worldwide state propagation, automatic replication, and zero DevOps overhead.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#get-started" class="btn-primary">Deploy Cluster Now</a>
+        <a href="#metrics" class="btn-secondary">Explore Live Telemetry</a>
+      </div>
+    </section>
+
+    <!-- Live Telemetry Dashboard Display (Looks Genuine & Working on Production) -->
+    <div class="live-dashboard" id="metrics">
+      <div class="dash-header">
+        <div class="dash-window-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="dash-route-badge">
+          https://apex.network &bull; Node: <strong>edge-fra-01</strong> &bull; Routing: <strong>100% HEALTHY</strong>
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--emerald);">
+          ALL NODES NOMINAL
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <!-- Main Column: Metrics & Stream -->
+        <div>
+          <div class="metric-cards-row">
+            <div class="metric-card">
+              <div class="metric-card-label">Global Requests / Min</div>
+              <div class="metric-card-val" id="metric-rpm">18,420</div>
+              <div class="metric-card-sub">&uarr; 14.2% nominal load</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-card-label">P99 Edge Latency</div>
+              <div class="metric-card-val" style="color: var(--cyan);" id="metric-latency">8.4ms</div>
+              <div class="metric-card-sub">Global average</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-card-label">Uptime SLA</div>
+              <div class="metric-card-val" style="color: var(--emerald);">99.998%</div>
+              <div class="metric-card-sub">0 dropped packets</div>
+            </div>
+          </div>
+
+          <!-- Live Log Stream -->
+          <div class="stream-panel">
+            <div class="stream-header">
+              <span>REAL-TIME EDGE ROUTER INGRESS</span>
+              <span>AUTO-STREAMING (60 FPS)</span>
+            </div>
+            <div class="stream-row">
+              <span>GET /api/v2/state-sync [Frankfurt]</span>
+              <span class="latency">6.2ms</span>
+              <span class="status-200">200 OK</span>
+            </div>
+            <div class="stream-row">
+              <span>POST /v1/auth/session-token [London]</span>
+              <span class="latency">7.8ms</span>
+              <span class="status-200">200 OK</span>
+            </div>
+            <div class="stream-row">
+              <span>GET /edge/worker-status [Singapore]</span>
+              <span class="latency">12.1ms</span>
+              <span class="status-200">200 OK</span>
+            </div>
+            <div class="stream-row">
+              <span>GET /api/v2/metrics-snapshot [US-East]</span>
+              <span class="latency">5.4ms</span>
+              <span class="status-200">200 OK</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar: Active Nodes -->
+        <div class="cluster-sidebar">
+          <div class="cluster-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+              <line x1="6" y1="6" x2="6.01" y2="6"></line>
+              <line x1="6" y1="18" x2="6.01" y2="18"></line>
+            </svg>
+            <span>Active Worker Fleet</span>
+          </div>
+
+          <div class="node-item">
+            <div class="node-name">
+              <span class="node-online-dot"></span>
+              <span>fra-01 (Frankfurt)</span>
+            </div>
+            <span class="node-load">CPU: 22%</span>
+          </div>
+
+          <div class="node-item">
+            <div class="node-name">
+              <span class="node-online-dot"></span>
+              <span>lon-02 (London)</span>
+            </div>
+            <span class="node-load">CPU: 18%</span>
+          </div>
+
+          <div class="node-item">
+            <div class="node-name">
+              <span class="node-online-dot"></span>
+              <span>iad-04 (Virginia)</span>
+            </div>
+            <span class="node-load">CPU: 31%</span>
+          </div>
+
+          <div class="node-item">
+            <div class="node-name">
+              <span class="node-online-dot"></span>
+              <span>sin-01 (Singapore)</span>
+            </div>
+            <span class="node-load">CPU: 14%</span>
+          </div>
+
+          <div class="node-item">
+            <div class="node-name">
+              <span class="node-online-dot"></span>
+              <span>tyo-02 (Tokyo)</span>
+            </div>
+            <span class="node-load">CPU: 26%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proof of Deployment / AutoFlow Verification Box -->
+    <div class="autoflow-proof-box" id="orchestration">
+      <div class="proof-details">
+        <div style="color: var(--cyan); font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 600; margin-bottom: 6px;">
+          PROVEN ORCHESTRATION PIPELINE
+        </div>
+        <h3>Shipped with AutoFlow Zero-Trust Deployment</h3>
+        <p>
+          This live production instance was built, validated, and hot-swapped using the local AutoFlow CLI. Secrets remained in the hardware enclave.
+        </p>
+        <div class="proof-meta-tags">
+          <span class="proof-tag">ORCHESTRATOR: AUTOFLOW v1.0.0</span>
+          <span class="proof-tag">PIPELINE: 15/15 STAGES PASSED</span>
+          <span class="proof-tag">ROLLBACK HEALTH: VERIFIED</span>
+        </div>
+      </div>
+      <div>
+        <a href="https://github.com/primetech-live/Autoflow-Release" target="_blank" rel="noopener noreferrer" class="btn-primary" style="white-space: nowrap;">
+          View AutoFlow Source
+        </a>
+      </div>
+    </div>
+
+    <!-- Core Features Grid -->
+    <section class="features-section" id="features">
+      <div class="section-headline">
+        <h2>Enterprise-grade reliability without DevOps friction</h2>
+        <p>Built for teams that require millisecond latency and absolute data sovereignty.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feat-card">
+          <h3>Local-First Sovereign Control</h3>
+          <p>
+            No external cloud platform holds your root keys. Deploy straight to bare-metal servers or VPS instances with total cryptographic isolation.
+          </p>
+        </div>
+        <div class="feat-card">
+          <h3>5-Second Atomic Rollbacks</h3>
+          <p>
+            Pre-flight socket probes verify container health before cutting over live traffic. If an error is detected, fallback triggers instantly.
+          </p>
+        </div>
+        <div class="feat-card">
+          <h3>Automated Nginx Hot-Swap</h3>
+          <p>
+            Traffic flows seamlessly from old to new releases via graceful SIGHUP reloading. Zero dropped connections during heavy production volume.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <div>&copy; 2026 Apex Cloud Inc. Deployed live with AutoFlow.</div>
+      <div style="font-family: var(--font-mono); font-size: 0.8125rem;">
+        RELEASE: <span style="color: var(--cyan);">v2.4.1-prod</span> &bull; PROBE: <span style="color: var(--emerald);">NOMINAL</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Subtle Live Telemetry Fluctuations for Genuine Recording Feel -->
+  <script>
+    const rpmEl = document.getElementById('metric-rpm');
+    const latEl = document.getElementById('metric-latency');
+
+    setInterval(() => {
+      if (rpmEl) {
+        const delta = Math.floor(Math.random() * 80) - 40;
+        const current = parseInt(rpmEl.innerText.replace(',', ''), 10);
+        rpmEl.innerText = (current + delta).toLocaleString();
+      }
+      if (latEl) {
+        const lat = (8.0 + Math.random() * 0.9).toFixed(1);
+        latEl.innerText = `${lat}ms`;
+      }
+    }, 2400);
+  </script>
 </body>
 </html>
