@@ -3,36 +3,37 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Kite — Local-first SQLite replication</title>
-  <meta name="description" content="Ultra-fast embedded SQLite database with automatic multi-master consensus and zero-downtime replication." />
+  <title>THE 3 // PRECISION PERFORMANCE</title>
+  <meta name="description" content="BMW 3 Series Sedan — Pure driving dynamics, athletic proportion, and visionary digital architecture." />
 
-  <!-- Typography: Inter & JetBrains Mono -->
+  <!-- BMW Editorial Typography: Plus Jakarta Sans / Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <style>
     /* -------------------------------------------------------------
-       Design System: Pure, deliberate craftsmanship.
-       No AI gradients, no fake neon blur, no generic cards.
-       Real type scale, high information density, intentional whitespace.
+       BMW M-Performance & 3 Series Editorial Design Language
+       Obsidian black canvas, BMW Laserlight Blue (#1c69d4),
+       high-contrast uppercase typography, and razor-sharp luxury finish.
        ------------------------------------------------------------- */
     :root {
-      --bg: #0c0d0e;
-      --bg-subtle: #141517;
-      --bg-hover: #1a1c1e;
-      --border: #222427;
-      --border-strong: #32353a;
+      --bmw-black: #060709;
+      --bmw-surface: #0e1014;
+      --bmw-elevated: #15181f;
+      --bmw-border: rgba(255, 255, 255, 0.08);
+      --bmw-border-strong: rgba(255, 255, 255, 0.2);
       
-      --text: #e6e8eb;
-      --text-muted: #888d96;
-      --text-dim: #5c6068;
+      --bmw-blue: #1c69d4;
+      --bmw-m-light-blue: #0099ff;
+      --bmw-m-red: #e11d48;
       
-      --accent: #22c55e;
-      --accent-muted: rgba(34, 197, 94, 0.12);
+      --text-white: #ffffff;
+      --text-silver: #a0a5ac;
+      --text-muted: #5e646e;
 
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+      --font-display: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     *, *::before, *::after {
@@ -42,548 +43,703 @@
     }
 
     html, body {
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: var(--font-sans);
-      font-size: 14px;
-      line-height: 1.5;
+      background-color: var(--bmw-black);
+      color: var(--text-white);
+      font-family: var(--font-display);
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.4;
     }
 
-    /* Subdued Production Deploy Banner */
-    .deploy-bar {
-      border-bottom: 1px solid var(--border);
-      background: var(--bg-subtle);
-      font-size: 12px;
-      color: var(--text-muted);
-      padding: 8px 0;
-    }
-
-    .deploy-bar .inner {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 0 20px;
+    /* Subdued AutoFlow Production Live Header Ribbon */
+    .bmw-live-ribbon {
+      background: #000000;
+      border-bottom: 1px solid var(--bmw-border);
+      padding: 8px 36px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
     }
 
-    .deploy-status {
+    .ribbon-status {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      color: #ffffff;
     }
 
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
+    .m-tricolor {
+      display: inline-flex;
+      gap: 2px;
+      height: 10px;
     }
 
-    .deploy-meta {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-dim);
+    .m-tricolor span {
+      width: 3px;
+      height: 100%;
+      transform: skewX(-20deg);
     }
 
-    .deploy-meta strong {
-      color: var(--text-muted);
-      font-weight: 500;
+    .m-tricolor .m1 { background: var(--bmw-m-light-blue); }
+    .m-tricolor .m2 { background: var(--bmw-blue); }
+    .m-tricolor .m3 { background: var(--bmw-m-red); }
+
+    .ribbon-meta span.cyan {
+      color: var(--bmw-m-light-blue);
     }
 
-    /* Layout Container */
-    .container {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    /* Header */
-    header {
-      padding: 32px 0 64px;
+    /* Header Navigation */
+    header.bmw-header {
+      padding: 24px 36px;
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: center;
+      border-bottom: 1px solid var(--bmw-border);
+      background: rgba(6, 7, 9, 0.85);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 99;
     }
 
-    .brand {
+    .bmw-brand {
       display: flex;
-      align-items: baseline;
-      gap: 12px;
+      align-items: center;
+      gap: 16px;
       text-decoration: none;
-      color: var(--text);
+      color: #ffffff;
+    }
+
+    .roundel-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .roundel-inner {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--bmw-blue) 0deg 90deg,
+        #ffffff 90deg 180deg,
+        var(--bmw-blue) 180deg 270deg,
+        #ffffff 270deg 360deg
+      );
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
     }
 
     .brand-title {
-      font-weight: 600;
-      font-size: 15px;
-      letter-spacing: -0.01em;
-    }
-
-    .brand-badge {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-dim);
-    }
-
-    nav {
-      display: flex;
-      gap: 24px;
-      font-size: 13px;
-    }
-
-    nav a {
-      color: var(--text-muted);
-      text-decoration: none;
-    }
-
-    nav a:hover {
-      color: var(--text);
-    }
-
-    /* Hero / Manifesto */
-    .hero {
-      margin-bottom: 56px;
-    }
-
-    .hero h1 {
-      font-size: 32px;
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      line-height: 1.25;
-      margin-bottom: 16px;
-      color: #ffffff;
-      max-width: 640px;
-    }
-
-    .hero-lead {
-      font-size: 15px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      max-width: 580px;
-      margin-bottom: 28px;
-    }
-
-    /* Quickstart terminal snippet */
-    .install-box {
-      display: inline-flex;
-      align-items: center;
-      background: var(--bg-subtle);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 14px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 48px;
-    }
-
-    .install-box span.prompt {
-      color: var(--text-dim);
-      margin-right: 8px;
-      user-select: none;
-    }
-
-    .install-box span.cmd {
-      color: var(--text);
-    }
-
-    .install-box button {
-      background: transparent;
-      border: none;
-      color: var(--text-dim);
-      margin-left: 16px;
-      padding-left: 12px;
-      border-left: 1px solid var(--border);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      cursor: pointer;
-    }
-
-    .install-box button:hover {
-      color: var(--text);
-    }
-
-    /* Two-column dense technical architecture overview */
-    .section-divider {
-      border: 0;
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 48px;
-    }
-
-    .tech-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      margin-bottom: 64px;
-    }
-
-    .tech-col h3 {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-dim);
-      margin-bottom: 16px;
     }
 
-    .feature-list {
-      list-style: none;
-    }
-
-    .feature-list li {
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .feature-list li:first-child {
-      border-top: 1px solid var(--border);
-    }
-
-    .feature-list .item-title {
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 4px;
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-    }
-
-    .feature-list .item-title span.tag {
+    .brand-subtitle {
+      font-size: 10px;
       font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--text-dim);
+      letter-spacing: 0.16em;
+      color: var(--text-silver);
+      text-transform: uppercase;
     }
 
-    .feature-list p {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.5;
+    nav.bmw-nav {
+      display: flex;
+      gap: 32px;
     }
 
-    /* Live Node Telemetry Table */
-    .table-section {
-      margin-bottom: 64px;
+    nav.bmw-nav a {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-silver);
+      text-decoration: none;
+      transition: color 0.15s ease;
     }
 
-    .table-section-header {
+    nav.bmw-nav a:hover {
+      color: #ffffff;
+    }
+
+    .header-cta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-bmw-ghost {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #ffffff;
+      padding: 10px 20px;
+      border: 1px solid var(--bmw-border-strong);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-bmw-ghost:hover {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    /* Hero Section (BMW Editorial) */
+    .bmw-hero {
+      position: relative;
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px 36px 40px;
+      border-bottom: 1px solid var(--bmw-border);
+      background: radial-gradient(circle at 65% 50%, rgba(28, 105, 212, 0.12) 0%, transparent 60%);
+    }
+
+    .hero-meta-strip {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 12px;
-    }
-
-    .table-section-header h2 {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .table-section-header span {
       font-family: var(--font-mono);
       font-size: 11px;
-      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--bmw-blue);
     }
 
-    .node-table {
+    .hero-main-title {
+      margin: 40px 0;
+    }
+
+    .hero-pretitle {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.25em;
+      color: var(--text-silver);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .hero-headline {
+      font-size: clamp(3.2rem, 8vw, 7.5rem);
+      font-weight: 800;
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: #ffffff;
+      max-width: 14ch;
+    }
+
+    .hero-headline span.italic {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-silver);
+    }
+
+    /* Silhouette / 3 Series Engineering Vector */
+    .hero-stage {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 40px;
+      align-items: flex-end;
+    }
+
+    .chassis-wireframe {
+      width: 100%;
+      height: 220px;
+      border-left: 2px solid var(--bmw-blue);
+      padding-left: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .chassis-callout {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--text-silver);
+      margin-bottom: 8px;
+    }
+
+    .chassis-specs-num {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-cta-box {
+      background: var(--bmw-surface);
+      border: 1px solid var(--bmw-border);
+      padding: 24px;
+    }
+
+    .hero-cta-box p {
+      font-size: 13px;
+      color: var(--text-silver);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .btn-bmw-primary {
+      display: block;
+      text-align: center;
+      background: var(--bmw-blue);
+      color: #ffffff;
+      padding: 14px 20px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.15s ease;
+    }
+
+    .btn-bmw-primary:hover {
+      background: #1557b0;
+    }
+
+    /* Technical Specification Strip (BMW Key Figures) */
+    .specs-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--bmw-border);
+    }
+
+    .spec-cell {
+      padding: 32px 36px;
+      border-right: 1px solid var(--bmw-border);
+    }
+
+    .spec-cell:last-child {
+      border-right: none;
+    }
+
+    .spec-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .spec-value {
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      line-height: 1;
+    }
+
+    .spec-value span.unit {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text-silver);
+      margin-left: 4px;
+    }
+
+    .spec-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* Asymmetric Editorial Spread */
+    .editorial-section {
+      padding: 80px 36px;
+      border-bottom: 1px solid var(--bmw-border);
+    }
+
+    .editorial-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .editorial-pretitle {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--bmw-blue);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .editorial-title {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .editorial-body {
+      font-size: 15px;
+      color: var(--text-silver);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .autoflow-deployment-card {
+      background: var(--bmw-surface);
+      border: 1px solid var(--bmw-border);
+      border-left: 3px solid var(--bmw-blue);
+      padding: 28px;
+    }
+
+    .autoflow-card-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .autoflow-card-header span.live-ok {
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    .autoflow-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .autoflow-card-desc {
+      font-size: 13px;
+      color: var(--text-silver);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .cli-copy-strip {
+      background: #000000;
+      border: 1px solid var(--bmw-border);
+      padding: 10px 14px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cli-copy-btn {
+      background: none;
+      border: none;
+      color: var(--bmw-blue);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Trim & Architecture Matrix Table */
+    .matrix-section {
+      padding: 80px 36px;
+      border-bottom: 1px solid var(--bmw-border);
+    }
+
+    .matrix-title {
+      font-size: 14px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-silver);
+      margin-bottom: 24px;
+    }
+
+    .bmw-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 13px;
     }
 
-    .node-table th {
+    .bmw-table th {
       text-align: left;
       font-family: var(--font-mono);
       font-size: 11px;
-      font-weight: 500;
-      color: var(--text-dim);
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border-strong);
-      background: transparent;
-    }
-
-    .node-table td {
-      padding: 12px;
-      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.1em;
       color: var(--text-muted);
+      text-transform: uppercase;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--bmw-border-strong);
     }
 
-    .node-table tr:hover td {
-      background: var(--bg-subtle);
-      color: var(--text);
+    .bmw-table td {
+      padding: 18px 16px;
+      border-bottom: 1px solid var(--bmw-border);
+      color: var(--text-silver);
     }
 
-    .node-table td.mono {
-      font-family: var(--font-mono);
-      font-size: 12px;
+    .bmw-table tr:hover td {
+      background: var(--bmw-surface);
+      color: #ffffff;
     }
 
-    .node-table td.status-healthy {
-      color: var(--accent);
-      font-family: var(--font-mono);
-      font-size: 12px;
-    }
-
-    /* Deployment Metadata Box */
-    .deploy-card {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 24px;
-      background: var(--bg-subtle);
-      margin-bottom: 64px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .deploy-card-left h4 {
-      font-size: 14px;
+    .bmw-table td.strong {
+      color: #ffffff;
       font-weight: 600;
-      margin-bottom: 4px;
-      color: var(--text);
     }
 
-    .deploy-card-left p {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .deploy-badge-group {
-      display: flex;
-      gap: 8px;
-    }
-
-    .badge-pill {
+    .bmw-table td.mono {
       font-family: var(--font-mono);
-      font-size: 11px;
-      padding: 4px 10px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      color: var(--text-muted);
-      background: var(--bg);
+      font-size: 12px;
     }
 
     /* Footer */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 32px 0 48px;
-      font-size: 12px;
-      color: var(--text-dim);
+    footer.bmw-footer {
+      padding: 40px 36px;
       display: flex;
       justify-content: space-between;
-    }
-
-    footer a {
+      align-items: center;
+      font-size: 12px;
       color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    footer.bmw-footer a {
+      color: var(--text-silver);
       text-decoration: none;
+      margin-left: 24px;
     }
 
-    footer a:hover {
-      color: var(--text);
+    footer.bmw-footer a:hover {
+      color: #ffffff;
     }
 
-    @media (max-width: 680px) {
-      .tech-grid {
+    @media (max-width: 900px) {
+      .specs-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .spec-cell:nth-child(2) {
+        border-right: none;
+      }
+      .editorial-grid, .hero-stage {
         grid-template-columns: 1fr;
-        gap: 24px;
       }
-      .deploy-card {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-      }
-      header {
-        flex-direction: column;
-        gap: 16px;
+      nav.bmw-nav {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Subdued, authentic AutoFlow Deployment Bar -->
-  <div class="deploy-bar">
-    <div class="inner">
-      <div class="deploy-status">
-        <span class="status-dot"></span>
-        <span>Production Release live via <strong>AutoFlow</strong></span>
+  <!-- Top M-Performance Production Status Ribbon -->
+  <div class="bmw-live-ribbon">
+    <div class="ribbon-status">
+      <div class="m-tricolor">
+        <span class="m1"></span><span class="m2"></span><span class="m3"></span>
       </div>
-      <div class="deploy-meta">
-        COMMIT: <strong>4f128c</strong> &bull; PROBE: <strong>0.00s DOWNTIME</strong> &bull; HOST: <strong>168.119.42.10</strong>
-      </div>
+      <span>AUTONOMOUS PRODUCTION NODE &bull; <strong>AUTOFLOW VERIFIED</strong></span>
+    </div>
+    <div class="ribbon-meta">
+      <span>CUTOVER: <span class="cyan">0.02s</span></span> &bull;
+      <span>STATUS: <span style="color:#10b981;">200 OK</span></span> &bull;
+      <span>HOST: 168.119.42.10</span>
     </div>
   </div>
 
-  <div class="container">
-    <!-- Header -->
-    <header>
-      <a href="#" class="brand">
-        <span class="brand-title">Kite</span>
-        <span class="brand-badge">v0.8.4</span>
-      </a>
-
-      <nav>
-        <a href="#architecture">Architecture</a>
-        <a href="#nodes">Nodes</a>
-        <a href="#consensus">Consensus</a>
-        <a href="https://github.com/chirag-parmar16/hello-test-autoflow" target="_blank" rel="noopener noreferrer">Source</a>
-      </nav>
-    </header>
-
-    <!-- Hero / Clean Product Introduction -->
-    <section class="hero">
-      <h1>Embedded SQLite with global consensus replication.</h1>
-      <p class="hero-lead">
-        Kite turns in-process SQLite databases into a distributed, multi-master cluster. Writes commit locally in sub-millisecond time and stream over Raft consensus to your replica network.
-      </p>
-
-      <div class="install-box">
-        <span class="prompt">$</span>
-        <span class="cmd">curl -fsSL https://kite.sh/install | sh</span>
-        <button id="copy-btn">copy</button>
+  <!-- Header -->
+  <header class="bmw-header">
+    <a href="#" class="bmw-brand">
+      <div class="roundel-logo">
+        <div class="roundel-inner"></div>
       </div>
-    </section>
-
-    <hr class="section-divider" />
-
-    <!-- Two-column dense technical architecture overview -->
-    <section class="tech-grid" id="architecture">
-      <div class="tech-col">
-        <h3>Storage Engine</h3>
-        <ul class="feature-list">
-          <li>
-            <div class="item-title">
-              <span>Zero-Copy WAL Tailing</span>
-              <span class="tag">I/O</span>
-            </div>
-            <p>Direct memory-mapped streaming of SQLite Write-Ahead Logs without user-space roundtrips.</p>
-          </li>
-          <li>
-            <div class="item-title">
-              <span>Deterministic Virtual Machine</span>
-              <span class="tag">VFS</span>
-            </div>
-            <p>Custom Virtual File System (VFS) guaranteeing identical page states across arm64 and x86_64 nodes.</p>
-          </li>
-          <li>
-            <div class="item-title">
-              <span>Atomic 5-Second Rollbacks</span>
-              <span class="tag">Safety</span>
-            </div>
-            <p>Pre-flight transaction verification ensures zero corrupted pages if a leader abruptly disconnects.</p>
-          </li>
-        </ul>
+      <div class="brand-text">
+        <span class="brand-title">THE 3</span>
+        <span class="brand-subtitle">BMW 3 SERIES // SEDAN</span>
       </div>
+    </a>
 
-      <div class="tech-col">
-        <h3>Replication Topology</h3>
-        <ul class="feature-list">
-          <li>
-            <div class="item-title">
-              <span>Lightweight Raft Consensus</span>
-              <span class="tag">Consensus</span>
-            </div>
-            <p>Optimized 3-node leader election with 250ms heartbeat intervals and automatic split-brain resolution.</p>
-          </li>
-          <li>
-            <div class="item-title">
-              <span>Encrypted P2P WireGuard</span>
-              <span class="tag">Network</span>
-            </div>
-            <p>Direct peer-to-peer tunnels without intermediary brokers. Keys are negotiated via hardware enclaves.</p>
-          </li>
-          <li>
-            <div class="item-title">
-              <span>Zero Infrastructure Markup</span>
-              <span class="tag">Sovereignty</span>
-            </div>
-            <p>Runs cleanly on any commodity $4/mo virtual server with predictable memory bounds under 64MB.</p>
-          </li>
-        </ul>
-      </div>
-    </section>
+    <nav class="bmw-nav">
+      <a href="#dynamics">Dynamics</a>
+      <a href="#technical">Specifications</a>
+      <a href="#architecture">Architecture</a>
+      <a href="https://github.com/chirag-parmar16/hello-test-autoflow" target="_blank" rel="noopener noreferrer">Repository</a>
+    </nav>
 
-    <!-- Node Telemetry Table -->
-    <section class="table-section" id="nodes">
-      <div class="table-section-header">
-        <h2>Live Cluster Topology</h2>
-        <span>ALL NODES IN SYNC</span>
-      </div>
+    <div class="header-cta">
+      <a href="#configure" class="btn-bmw-ghost">Configure</a>
+    </div>
+  </header>
 
-      <table class="node-table">
-        <thead>
-          <tr>
-            <th>NODE ID</th>
-            <th>REGION</th>
-            <th>ROLE</th>
-            <th>LOG INDEX</th>
-            <th>LATENCY</th>
-            <th>STATUS</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="mono">node-fra-01</td>
-            <td>Frankfurt, DE</td>
-            <td>Leader</td>
-            <td class="mono">#1,849,204</td>
-            <td class="mono">0.4ms</td>
-            <td class="status-healthy">HEALTHY</td>
-          </tr>
-          <tr>
-            <td class="mono">node-lon-02</td>
-            <td>London, UK</td>
-            <td>Follower</td>
-            <td class="mono">#1,849,204</td>
-            <td class="mono">8.2ms</td>
-            <td class="status-healthy">HEALTHY</td>
-          </tr>
-          <tr>
-            <td class="mono">node-iad-03</td>
-            <td>Virginia, US</td>
-            <td>Follower</td>
-            <td class="mono">#1,849,203</td>
-            <td class="mono">74.1ms</td>
-            <td class="status-healthy">HEALTHY</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- AutoFlow Deployment Proof -->
-    <div class="deploy-card">
-      <div class="deploy-card-left">
-        <h4>Orchestrated with AutoFlow</h4>
-        <p>Deployed from local repository over zero-trust SSH with automated atomic container cutover.</p>
-      </div>
-      <div class="deploy-badge-group">
-        <span class="badge-pill">autoflow deploy</span>
-        <span class="badge-pill">status: 200 ok</span>
-        <span class="badge-pill">downtime: 0s</span>
-      </div>
+  <!-- Hero Section (BMW High-Impact Editorial) -->
+  <section class="bmw-hero">
+    <div class="hero-meta-strip">
+      <span>BMW M PERFORMANCE ARCHITECTURE</span>
+      <span>SERIES 03 // 2026</span>
     </div>
 
-    <!-- Footer -->
-    <footer>
-      <div>&copy; 2026 Kite Engine. Open-source software.</div>
+    <div class="hero-main-title">
+      <span class="hero-pretitle">THE DEFINITION OF THE SPORT SEDAN</span>
+      <h1 class="hero-headline">
+        BORN TO <span class="italic">PERFORM.</span><br />
+        DRIVEN BY WILL.
+      </h1>
+    </div>
+
+    <div class="hero-stage">
+      <div class="chassis-wireframe">
+        <div class="chassis-callout">50:50 AXLE WEIGHT DISTRIBUTION // REAR-WHEEL BIAS</div>
+        <div class="chassis-specs-num">M TWINPOWER TURBO &bull; 382 HP</div>
+      </div>
+
+      <div class="hero-cta-box">
+        <p>
+          Precision chassis tuning, athletic contours, and state-of-the-art telemetry integration. Deployed with sovereign zero-downtime orchestration.
+        </p>
+        <a href="#technical" class="btn-bmw-primary">Explore Vehicle Telemetry</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Specs Key Figures Strip (BMW Style) -->
+  <section class="specs-strip" id="technical">
+    <div class="spec-cell">
+      <span class="spec-label">ACCELERATION 0-100 KM/H</span>
+      <div class="spec-value">4.4<span class="unit">s</span></div>
+      <div class="spec-sub">M340i xDrive Sedan</div>
+    </div>
+
+    <div class="spec-cell">
+      <span class="spec-label">ENGINE OUTPUT</span>
+      <div class="spec-value">285<span class="unit">kW (382 hp)</span></div>
+      <div class="spec-sub">Inline 6-cylinder Petrol</div>
+    </div>
+
+    <div class="spec-cell">
+      <span class="spec-label">MAXIMUM TORQUE</span>
+      <div class="spec-value">500<span class="unit">Nm</span></div>
+      <div class="spec-sub">At 1,900 - 5,000 rpm</div>
+    </div>
+
+    <div class="spec-cell">
+      <span class="spec-label">TOP SPEED (GOVERNED)</span>
+      <div class="spec-value">250<span class="unit">km/h</span></div>
+      <div class="spec-sub">Electronically Limited</div>
+    </div>
+  </section>
+
+  <!-- Asymmetric Editorial Spread: Dynamics & AutoFlow Verification -->
+  <section class="editorial-section" id="dynamics">
+    <div class="editorial-grid">
       <div>
-        <a href="https://github.com/chirag-parmar16/hello-test-autoflow" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        <span class="editorial-pretitle">CHASSIS & ENGINE CONTROL</span>
+        <h2 class="editorial-title">
+          UNCOMPROMISING AGILITY ON EVERY ROAD.
+        </h2>
+        <p class="editorial-body">
+          Adaptive M suspension combines sport stiffness with long-distance grand touring comfort. Electromechanical M sport steering and differential locks ensure razor-sharp turn-in responsiveness under maximum lateral acceleration.
+        </p>
+
+        <!-- AutoFlow Deployment Proof Box -->
+        <div class="autoflow-deployment-card" id="architecture">
+          <div class="autoflow-card-header">
+            <span>ORCHESTRATED INFRASTRUCTURE</span>
+            <span class="live-ok">&bull; AUTOFLOW LIVE (200 OK)</span>
+          </div>
+          <div class="autoflow-card-title">Production Cutover Executed in 0.02s</div>
+          <div class="autoflow-card-desc">
+            This live digital showcase was delivered through AutoFlow's direct zero-trust SSH pipeline. Hardware enclave encryption protected root keys, achieving zero downtime on container hot-swap.
+          </div>
+          <div class="cli-copy-strip">
+            <span>$ npx autoflow deploy --target 168.119.42.10</span>
+            <button class="cli-copy-btn" id="copy-btn">COPY CLI</button>
+          </div>
+        </div>
       </div>
-    </footer>
-  </div>
+
+      <!-- Live Telemetry / Model Spec Table -->
+      <div>
+        <div class="matrix-title">MODEL SPECIFICATIONS & ENGINE DYNAMICS</div>
+        <table class="bmw-table">
+          <thead>
+            <tr>
+              <th>PARAMETER</th>
+              <th>SPECIFICATION</th>
+              <th>SYSTEM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="strong">Transmission</td>
+              <td>8-Speed Steptronic Sport</td>
+              <td class="mono">M Launch Control</td>
+            </tr>
+            <tr>
+              <td class="strong">Drivetrain</td>
+              <td>Intelligent xDrive All-Wheel</td>
+              <td class="mono">Rear-Biased Torque</td>
+            </tr>
+            <tr>
+              <td class="strong">Chassis Control</td>
+              <td>Adaptive M Variable Damper</td>
+              <td class="mono">Dynamic Stability (DSC)</td>
+            </tr>
+            <tr>
+              <td class="strong">Exhaust Gas</td>
+              <td>M Sport Dual Valve Exhaust</td>
+              <td class="mono">Active Acoustic Valve</td>
+            </tr>
+            <tr>
+              <td class="strong">Deploy Engine</td>
+              <td>AutoFlow Container Engine</td>
+              <td class="mono" style="color: var(--bmw-blue);">0.00s Downtime Verified</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bmw-footer">
+    <div>&copy; 2026 Bayerische Motoren Werke AG &bull; Deployed via AutoFlow Orchestrator.</div>
+    <div>
+      <a href="https://github.com/chirag-parmar16/hello-test-autoflow" target="_blank" rel="noopener noreferrer">GitHub Source</a>
+    </div>
+  </footer>
 
   <script>
-    // Copy helper
     const btn = document.getElementById('copy-btn');
     if (btn) {
       btn.addEventListener('click', () => {
-        navigator.clipboard.writeText('curl -fsSL https://kite.sh/install | sh');
-        btn.textContent = 'copied';
-        setTimeout(() => { btn.textContent = 'copy'; }, 2000);
+        navigator.clipboard.writeText('npx autoflow deploy --target 168.119.42.10');
+        btn.textContent = 'COPIED';
+        setTimeout(() => { btn.textContent = 'COPY CLI'; }, 2000);
       });
     }
   </script>
