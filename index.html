@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AutoFlow — Live Processing Node</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #06080e;
+      --panel: rgba(14, 18, 28, 0.75);
+      --border: rgba(0, 210, 255, 0.18);
+      --border-bright: rgba(0, 210, 255, 0.45);
+      --cyan: #00d2ff;
+      --green: #10b981;
+      --text: #f0f4f8;
+      --muted: #627282;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-sans: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Processing Grid & Scanning Beam Background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0, 210, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 210, 255, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .radar-sweep {
+      position: fixed;
+      inset: -50%;
+      background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 210, 255, 0.06) 60deg, transparent 61deg);
+      animation: sweep 10s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes sweep {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Core Terminal Processing Card */
+    .terminal-card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 680px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 210, 255, 0.08);
+      overflow: hidden;
+    }
+
+    /* Top HUD Bar */
+    .terminal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8, 11, 18, 0.8);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .telemetry-meta {
+      color: var(--muted);
+    }
+
+    /* Main Content */
+    .terminal-body {
+      padding: 44px 36px 36px;
+      text-align: center;
+    }
+
+    .greeting-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-bright);
+      background: rgba(0, 210, 255, 0.08);
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 40%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .deployed-statement {
+      font-size: 1.15rem;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: 32px;
+    }
+
+    .deployed-statement span {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    /* Live Progress Pipeline */
+    .progress-track-wrapper {
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .progress-track {
+      height: 6px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #0088ff, var(--cyan));
+      box-shadow: 0 0 12px var(--cyan);
+      animation: loadPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes loadPulse {
+      0% { width: 35%; }
+      50% { width: 92%; }
+      100% { width: 100%; }
+    }
+
+    /* Terminal Console Stream */
+    .console-stream {
+      background: #030408;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #7dd3fc;
+      text-align: left;
+      line-height: 1.8;
+      position: relative;
+    }
+
+    .console-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .console-line span.time {
+      color: var(--muted);
+    }
+
+    .console-line span.ok {
+      color: var(--green);
+    }
+
+    /* Footer Telemetry Chips */
+    .hud-chips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-align: left;
+    }
+
+    .chip-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .chip-label {
+      color: var(--muted);
+      font-size: 0.6875rem;
+    }
+
+    .chip-val {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+      .hud-chips {
+        grid-template-columns: 1fr;
+      }
+      .terminal-body {
+        padding: 32px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="radar-sweep"></div>
+
+  <div class="terminal-card">
+    <!-- Top HUD Bar -->
+    <div class="terminal-topbar">
+      <div class="status-badge">
+        <span class="pulse-dot"></span>
+        <span>PRODUCTION ACTIVE</span>
+      </div>
+      <div class="telemetry-meta">
+        NODE: AF-NODE-01 // RTT: 11ms
+      </div>
+    </div>
+
+    <!-- Main Body -->
+    <div class="terminal-body">
+      <div class="greeting-pill">
+        <span>🚀</span>
+        <span>STATUS: 100% NOMINAL</span>
+      </div>
+
+      <h1>Hello AutoFlow</h1>
+      <p class="deployed-statement">Website deployed by <span>AutoFlow</span></p>
+
+      <!-- Processing Progress Bar -->
+      <div class="progress-track-wrapper">
+        <div class="progress-meta">
+          <span>DEPLOY PIPELINE</span>
+          <span style="color: var(--cyan);">CONTAINER SERVING // 200 OK</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Live Console Log Stream -->
+      <div class="console-stream">
+        <div class="console-line">
+          <span class="time">[0.02s]</span>
+          <span class="ok">✔</span>
+          <span>Zero-trust SSH handshake established</span>
+        </div>
+        <div class="console-line">
+          <span class="time">[1.42s]</span>
+          <span class="ok">✔</span>
+          <span>Isolated container spawned on port 3000</span>
+        </div>
+        <div class="console-line">
+          <span class="time">[2.18s]</span>
+          <span class="ok">✔</span>
+          <span>Health check passed. SIGHUP cutover complete.</span>
+        </div>
+      </div>
+
+      <!-- Telemetry Chips -->
+      <div class="hud-chips">
+        <div class="chip-item">
+          <span class="chip-label">ORCHESTRATOR</span>
+          <span class="chip-val">AutoFlow v1.0.0</span>
+        </div>
+        <div class="chip-item">
+          <span class="chip-label">SECURITY</span>
+          <span class="chip-val" style="color: var(--green);">Zero-Trust Tunnel</span>
+        </div>
+        <div class="chip-item">
+          <span class="chip-label">DOWNTIME</span>
+          <span class="chip-val" style="color: var(--cyan);">0.00 Seconds</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
